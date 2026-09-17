@@ -13,7 +13,7 @@
 
 ## Partner Organization
 
-[CIMIT](https://cimit.org/)
+CIMIT ([cimit.org](https://cimit.org/))
 
 ## Milestones
 
