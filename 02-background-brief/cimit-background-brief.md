@@ -43,11 +43,9 @@ These agents therefore touch judgments about what counts as credible evidence, w
 
 According to the overview, the pilot works with uploaded documents, transcripts, and team-controlled state files, including exported GAITS evidence. Direct integration with persistent GAITS records is a future deployment model. The stated design requires human review and approval before AI proposals take effect. These are described safeguards, not independently verified findings about pilot performance.
 
-### Individual generative AI use and planned applications
-
-The author of *AI in Healthcare Innovation: What to Act On, What to Watch, What to Plan Against* reports using Claude to research and write that paper, including identifying inconsistencies and claims needing evidence. This documents an individual use of generative AI. It does not establish a broader CIMIT staff practice.
-
 Five additional Cairn-Ai modules are described as **in planning**: AUXILIUM for deliverable guidance; INDICIUM for monitoring external developments; SYNOPSIS for mentor preparation; SKOPOS for portfolio analysis; and METRIA for extracting project metrics. They should not be counted as current operational uses.
+
+Beyond this, CIMIT leadership has reported sharing the paper [AI in Healthcare Innovation: What to Act On, What to Watch, What to Plan Against]([https://cimit.org/our-tools/](https://github.com/mld371-hks/mld371-thediverseteam/blob/main/01-partner/AI%20Exposure%20Advice%20for%20Teams-v1.pdf)) as advice for teams on individual AI use.
 
 ## Relevance to the AI policy project
 
