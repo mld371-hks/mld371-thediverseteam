@@ -45,7 +45,7 @@ According to the overview, the pilot works with uploaded documents, transcripts,
 
 Five additional Cairn-Ai modules are described as **in planning**: AUXILIUM for deliverable guidance; INDICIUM for monitoring external developments; SYNOPSIS for mentor preparation; SKOPOS for portfolio analysis; and METRIA for extracting project metrics. They should not be counted as current operational uses.
 
-Beyond this, CIMIT leadership has reported sharing the paper [AI in Healthcare Innovation: What to Act On, What to Watch, What to Plan Against]([https://cimit.org/our-tools/](https://github.com/mld371-hks/mld371-thediverseteam/blob/main/01-partner/AI%20Exposure%20Advice%20for%20Teams-v1.pdf)) as advice for teams on individual AI use.
+Beyond this, CIMIT leadership has reported sharing the paper [AI in Healthcare Innovation: What to Act On, What to Watch, What to Plan Against](01-partner/AI Exposure Advice for Teams-v1.pdf) as advice for teams on individual AI use.
 
 ## Relevance to the AI policy project
 
