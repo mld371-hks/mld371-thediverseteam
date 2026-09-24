@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CIMIT Relationship Map</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --text: #1f2328;
+    --muted: #5d646d;
+    --border: #d9d6cf;
+    --edge: #4a6a8a;
+    --edge-aff: #9a9892;
+    --strained: #c8322b;
+    --n-team: #3f7fbf;
+    --n-cimit: #2f8f6f;
+    --n-org: #8a6bb8;
+    --n-platform: #c47f22;
+    --halo: #fbfaf7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16181c; --surface: #1e2126; --text: #e8e6e1; --muted: #a2a7ae;
+      --border: #363a41; --edge: #8fb0d0; --edge-aff: #6f737a; --strained: #ef6a62;
+      --n-team: #5b9ad6; --n-cimit: #45b08c; --n-org: #a78bd2; --n-platform: #dc9a3e;
+      --halo: #16181c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16181c; --surface: #1e2126; --text: #e8e6e1; --muted: #a2a7ae;
+    --border: #363a41; --edge: #8fb0d0; --edge-aff: #6f737a; --strained: #ef6a62;
+    --n-team: #5b9ad6; --n-cimit: #45b08c; --n-org: #a78bd2; --n-platform: #dc9a3e;
+    --halo: #16181c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 1120px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .chart { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px; }
+  svg { display: block; width: 100%; height: auto; }
+  .edge { fill: none; stroke: var(--edge); stroke-linecap: round; }
+  .edge.aff { stroke: var(--edge-aff); stroke-dasharray: 5 5; }
+  .edge.strained { stroke: var(--strained); }
+  .elabel { font-size: 11.5px; fill: var(--muted); paint-order: stroke; stroke: var(--halo); stroke-width: 4px; text-anchor: middle; }
+  .nlabel { font-size: 13px; font-weight: 600; fill: var(--text); paint-order: stroke; stroke: var(--halo); stroke-width: 4px; text-anchor: middle; }
+  .nrole { font-size: 11px; fill: var(--muted); paint-order: stroke; stroke: var(--halo); stroke-width: 4px; text-anchor: middle; }
+  .node { stroke: var(--surface); stroke-width: 2px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px 28px; margin: 16px 0 0; padding: 0; list-style: none; font-size: 13px; color: var(--muted); }
+  .legend li { display: flex; align-items: center; gap: 8px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .line { width: 34px; height: 0; border-top: 2px solid var(--edge); display: inline-block; }
+  .caption { margin: 18px 0 0; max-width: 72ch; }
+  details { margin-top: 20px; font-size: 13.5px; color: var(--muted); }
+  summary { cursor: pointer; color: var(--text); font-weight: 600; }
+  details ul { padding-left: 20px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>CIMIT relationship map</h1>
+  <p class="sub">Documented relationships only · CIMIT About page, partner email thread (Sept 8–10, 2026), team background brief</p>
+
+  <div class="chart">
+    <svg id="map" viewBox="0 0 1120 640" role="img" aria-label="Network chart of documented relationships between the MLD 371 team, CIMIT staff, and partner organizations"></svg>
+  </div>
+
+  <ul class="legend">
+    <li><span class="dot" style="background:var(--n-team)"></span>MLD 371 team member</li>
+    <li><span class="dot" style="background:var(--n-cimit)"></span>CIMIT staff / group</li>
+    <li><span class="dot" style="background:var(--n-org)"></span>Affiliated institution</li>
+    <li><span class="dot" style="background:var(--n-platform)"></span>Platform / initiative</li>
+    <li>Node size = number of relationships held</li>
+    <li><span class="line" style="border-top-width:1.5px"></span><span class="line" style="border-top-width:7px"></span>Thicker = more documented exchanges</li>
+    <li><span class="line" style="border-top-style:dashed;border-color:var(--edge-aff)"></span>Affiliation (not a communication channel)</li>
+    <li><span class="line" style="border-color:var(--strained);border-top-width:3px"></span>Strained (none documented)</li>
+  </ul>
+
+  <p class="caption">Elisa Celli is the team's single point of contact with CIMIT. All partner communication so far runs through her exchange with John Collins on Sept 8, which she forwarded to four teammates on Sept 10. Line thickness counts the messages in that one thread. How often people talk beyond it, and whether any relationship is strained, isn't documented yet, so no edges are shown in red. Haben Abrha is on the team but doesn't appear in the thread.</p>
+
+  <details>
+    <summary>Source for each relationship</summary>
+    <ul id="sources"></ul>
+  </details>
+</main>
+
+<script>
+(function () {
+  var nodes = [
+    { id: "elisa",   name: "Elisa Celli",          role: "MLD 371 team",                     type: "team",     x: 320,  y: 350 },
+    { id: "yael",    name: "Yael Crupnicoff",      role: "MLD 371 team",                     type: "team",     x: 100,  y: 140 },
+    { id: "yitian",  name: "Yitian Liu",           role: "MLD 371 team",                     type: "team",     x: 100,  y: 280 },
+    { id: "eileen",  name: "Eileen Sullivan",      role: "MLD 371 team",                     type: "team",     x: 100,  y: 420 },
+    { id: "arianne", name: "Arianne Benge",        role: "MLD 371 team",                     type: "team",     x: 100,  y: 560 },
+    { id: "collins", name: "John Collins, PhD",    role: "Director, Innovative Platforms",   type: "cimit",    x: 640,  y: 350 },
+    { id: "schacht", name: "Steven Schachter, MD", role: "Chief Academic Officer",           type: "cimit",    x: 480,  y: 110 },
+    { id: "comms",   name: "CIMIT Communications", role: "Shared inbox",                     type: "cimit",    x: 730,  y: 80  },
+    { id: "cimit",   name: "CIMIT",                role: "Nonprofit health accelerator",     type: "cimit",    x: 920,  y: 250 },
+    { id: "mgh",     name: "Mass General Hospital", role: "Affiliated institution",          type: "org",      x: 1030, y: 110 },
+    { id: "hms",     name: "Harvard Medical School", role: "Affiliated institution",         type: "org",      x: 1030, y: 390 },
+    { id: "cairn",   name: "Cairn-Ai",             role: "AI agents, limited pilot",         type: "platform", x: 720,  y: 560 },
+    { id: "gaits",   name: "GAITS",                role: "Portfolio platform & frameworks",  type: "platform", x: 950,  y: 560 }
+  ];
+
+  // n = number of documented exchanges (drives thickness); aff = affiliation, not a channel.
+  var edges = [
+    { a: "elisa", b: "collins", label: "Email ×7", n: 7, bend: -40,
+      src: "Seven email headers between Elisa and John on Sept 8 (partner thread PDF)." },
+    { a: "elisa", b: "collins", label: "Video call ×1", n: 1, bend: 40,
+      src: "Sept 8 call, 11:40 AM–12:10 PM. Scheduled on Teams, then moved to Zoom (partner thread PDF)." },
+    { a: "elisa", b: "schacht", label: "Email cc ×1", n: 1,
+      src: "Elisa cc'd Steven Schachter on her first outreach email (partner thread PDF)." },
+    { a: "collins", b: "schacht", label: "Email cc ×1", n: 1, t: 0.3,
+      src: "John kept Steven Schachter cc'd on his first reply (partner thread PDF)." },
+    { a: "elisa", b: "comms", label: "Email cc ×1", n: 1, t: 0.3,
+      src: "Elisa cc'd CIMIT Communications on her first outreach email (partner thread PDF)." },
+    { a: "collins", b: "comms", label: "Email cc ×1", n: 1,
+      src: "John kept CIMIT Communications cc'd on his first reply (partner thread PDF)." },
+    { a: "elisa", b: "yael",    label: "Email fwd ×1", n: 1, src: "Elisa forwarded the thread and attachments on Sept 10 (partner thread PDF)." },
+    { a: "elisa", b: "yitian",  label: "Email fwd ×1", n: 1, src: "Elisa forwarded the thread and attachments on Sept 10 (partner thread PDF)." },
+    { a: "elisa", b: "eileen",  label: "Email fwd ×1", n: 1, src: "Elisa forwarded the thread and attachments on Sept 10 (partner thread PDF)." },
+    { a: "elisa", b: "arianne", label: "Email fwd ×1", n: 1, src: "Elisa forwarded the thread and attachments on Sept 10 (partner thread PDF)." },
+    { a: "collins", b: "cimit", label: "Staff", aff: true, src: "Listed as Director, Innovative Platforms (cimit.org/about)." },
+    { a: "schacht", b: "cimit", label: "Staff", aff: true, src: "Listed as Chief Academic Officer (cimit.org/about)." },
+    { a: "comms", b: "cimit", label: "CIMIT inbox", aff: true, src: "CIMIT's communications address, cc'd in the thread (partner thread PDF)." },
+    { a: "cimit", b: "mgh", label: "Affiliated", aff: true, src: "CIMIT is affiliated with Massachusetts General Hospital (background brief, citing cimit.org)." },
+    { a: "cimit", b: "hms", label: "Affiliated", aff: true, src: "CIMIT is affiliated with Harvard Medical School (background brief, citing cimit.org)." },
+    { a: "collins", b: "cairn", label: "Builds", aff: true, src: "John describes Cairn-Ai as “a set of AI agents I am building” (partner thread PDF)." },
+    { a: "collins", b: "gaits", label: "Developed", aff: true, src: "John calls the GAITS demo “the demo platform we developed” (partner thread PDF)." },
+    { a: "cairn", b: "gaits", label: "Applies frameworks", aff: true, src: "Cairn-Ai helps teams apply the frameworks published at GAITS.org (partner thread PDF)." }
+  ];
+
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("map");
+  var byId = {};
+  nodes.forEach(function (n) { n.deg = 0; byId[n.id] = n; });
+  edges.forEach(function (e) { byId[e.a].deg++; byId[e.b].deg++; });
+
+  function el(tag, attrs, text) {
+    var x = document.createElementNS(NS, tag);
+    for (var k in attrs) x.setAttribute(k, attrs[k]);
+    if (text) x.textContent = text;
+    return x;
+  }
+  function radius(n) { return 10 + Math.sqrt(n.deg) * 8; }
+
+  var gEdges = el("g", {}), gLabels = el("g", {}), gNodes = el("g", {});
+  svg.appendChild(gEdges); svg.appendChild(gLabels); svg.appendChild(gNodes);
+
+  edges.forEach(function (e) {
+    var A = byId[e.a], B = byId[e.b];
+    var mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2;
+    var bend = e.bend || 0;
+    var dx = B.x - A.x, dy = B.y - A.y, len = Math.hypot(dx, dy);
+    var cx = mx - dy / len * bend, cy = my + dx / len * bend;
+    var w = e.aff ? 1.5 : 1.5 + (e.n - 1) * 1;
+    var cls = "edge" + (e.aff ? " aff" : "") + (e.strained ? " strained" : "");
+    var path = el("path", { d: "M" + A.x + "," + A.y + " Q" + cx + "," + cy + " " + B.x + "," + B.y, class: cls, "stroke-width": w });
+    path.appendChild(el("title", {}, A.name + " ↔ " + B.name + ": " + e.label));
+    gEdges.appendChild(path);
+    // label along the curve (midpoint unless t is set)
+    var t = e.t || 0.5, u = 1 - t;
+    var lx = u * u * A.x + 2 * u * t * cx + t * t * B.x, ly = u * u * A.y + 2 * u * t * cy + t * t * B.y;
+    gLabels.appendChild(el("text", { x: lx, y: ly + 4, class: "elabel" }, e.label));
+  });
+
+  var colors = { team: "var(--n-team)", cimit: "var(--n-cimit)", org: "var(--n-org)", platform: "var(--n-platform)" };
+  nodes.forEach(function (n) {
+    var r = radius(n);
+    var c = el("circle", { cx: n.x, cy: n.y, r: r, class: "node", fill: colors[n.type] });
+    c.appendChild(el("title", {}, n.name + " — " + n.deg + " relationship" + (n.deg === 1 ? "" : "s")));
+    gNodes.appendChild(c);
+    gNodes.appendChild(el("text", { x: n.x, y: n.y + r + 16, class: "nlabel" }, n.name));
+    gNodes.appendChild(el("text", { x: n.x, y: n.y + r + 30, class: "nrole" }, n.role + " · " + n.deg));
+  });
+
+  var list = document.getElementById("sources");
+  edges.forEach(function (e) {
+    var li = document.createElement("li");
+    li.textContent = byId[e.a].name + " ↔ " + byId[e.b].name + " (" + e.label + "): " + e.src;
+    list.appendChild(li);
+  });
+})();
+</script>
+</body>
+</html>
