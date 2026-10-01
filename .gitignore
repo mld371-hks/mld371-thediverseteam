@@ -1,0 +1,7 @@
+# macOS folder metadata — created automatically, not part of the project
+.DS_Store
+
+# Word/Excel/PowerPoint lock files, created while a document is open
+~$*.doc*
+~$*.xls*
+~$*.ppt*
