@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How CIMIT selects reviewer panels — current state</title>
+<style>
+  :root {
+    --paper:#f4f1e8;
+    --band:#e7e2d4;
+    --band-alt:#ece8dc;
+    --ink:#23221f;
+    --ink-soft:#6b675e;
+    --line:#5a5a55;
+    --cost:#b3382c;
+    --cost-fill:#fbe9e6;
+    --signal:#b8891a;
+    --signal-fill:#fbf2dc;
+    --neutral:#3a3a38;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    line-height:1.5;
+  }
+  .page { max-width:1560px; margin:0 auto; padding:36px 28px 72px; }
+  h1 { font-size:25px; margin:0 0 6px; letter-spacing:-.3px; }
+  .sub { font-size:13px; color:var(--ink-soft); margin:0 0 26px; }
+  .frame {
+    background:#fff;
+    border:1px solid #d8d2c2;
+    border-radius:10px;
+    padding:14px;
+    overflow-x:auto;
+  }
+  svg.map { display:block; width:100%; min-width:1700px; height:auto; }
+
+  .legend {
+    display:flex; flex-wrap:wrap; gap:10px 26px;
+    margin:20px 0 0; padding:16px 18px;
+    background:#fff; border:1px solid #d8d2c2; border-radius:10px;
+    font-size:12.5px;
+  }
+  .legend div { display:flex; align-items:center; gap:9px; }
+  .sw { width:22px; height:14px; border-radius:3px; border:2px solid; flex:none; }
+  .sw.cost { background:var(--cost-fill); border-color:var(--cost); }
+  .sw.signal { background:var(--signal-fill); border-color:var(--signal); }
+  .sw.neutral { background:#fff; border-color:var(--neutral); }
+  .sw.gap { background:#fff; border:1.5px dashed #9a948a; border-radius:9px; }
+
+  .caption { margin:22px 0 0; font-size:13.5px; max-width:93ch; }
+  .caption h2 { font-size:12px; text-transform:uppercase; letter-spacing:1.1px; color:var(--ink-soft); margin:0 0 8px; }
+
+  .flag {
+    margin:22px 0 0; padding:14px 18px;
+    border-left:3px solid var(--cost); background:#fff;
+    border-radius:0 8px 8px 0; font-size:13px;
+  }
+  .flag strong { color:var(--cost); }
+
+  details { margin:22px 0 0; background:#fff; border:1px solid #d8d2c2; border-radius:10px; padding:14px 18px; }
+  summary { cursor:pointer; font-size:13px; font-weight:600; }
+  table { border-collapse:collapse; width:100%; margin-top:14px; font-size:12.5px; }
+  th, td { text-align:left; vertical-align:top; padding:8px 10px; border-bottom:1px solid #ece8dc; }
+  th { font-size:11px; text-transform:uppercase; letter-spacing:.7px; color:var(--ink-soft); }
+  td.q { color:var(--ink-soft); font-style:italic; }
+
+  .notcurrent { margin:22px 0 0; padding:16px 18px; background:#fff; border:1.5px dashed #b6ae9c; border-radius:10px; }
+  .notcurrent h2 { font-size:12px; text-transform:uppercase; letter-spacing:1.1px; color:var(--ink-soft); margin:0 0 4px; }
+  .notcurrent p.lead { font-size:12.5px; color:var(--ink-soft); margin:0 0 10px; }
+  .notcurrent ul { margin:0; padding-left:20px; font-size:13px; }
+  .notcurrent li { margin-bottom:5px; }
+
+  @media print {
+    body { background:#fff; }
+    .frame, .legend, details, .notcurrent, .flag { border-color:#ccc; }
+    svg.map { min-width:0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>How CIMIT selects reviewer panels</h1>
+  <p class="sub">Current state, mapped from <em>Notes from the Meeting</em> (John Collins, CIMIT) &middot; MLD 371 &middot; midpoint working draft</p>
+
+  <div class="frame">
+    <svg class="map" id="map" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1870 760" role="img"
+         aria-label="Left-to-right flowchart of CIMIT's current reviewer panel selection process, in four role lanes."></svg>
+  </div>
+
+  <div class="legend">
+    <div><span class="sw cost"></span> <span><strong>Cost</strong> &mdash; friction working against the process</span></div>
+    <div><span class="sw signal"></span> <span><strong>Signal worth keeping</strong> &mdash; friction that earns its place</span></div>
+    <div><span class="sw neutral"></span> <span>Step with no friction noted</span></div>
+    <div><span class="sw gap"></span> <span><strong>? delay</strong> &mdash; hand-off time not captured in the notes</span></div>
+  </div>
+
+  <div class="caption">
+    <h2>Caption</h2>
+    <p>
+      This maps the seven steps CIMIT currently runs to put a reviewer panel in front of a submitted
+      proposal, from the innovation team's submission through to a panel matched against CIMIT's
+      stated ideal &mdash; subject-matter expertise plus an average reviewer score of 5 on a 1&ndash;10 scale.
+      The process is sound at both ends and thin in the middle: the independence screen and the
+      panel-matching criterion are deliberate quality checks worth protecting (gold), while expert
+      sourcing, outreach, and scoring each lose information that CIMIT cannot get back (red) &mdash;
+      expertise is pulled off LinkedIn with no reviewer database behind it, nobody records who was
+      approached, and scores arrive uncalibrated because, as John put it, some reviewers are strict
+      and some are kind. Roughly half the pool are one-off or business reviewers, so there is little
+      repeat history to learn from. These three red steps are precisely where the tool we are scoping
+      would sit.
+    </p>
+  </div>
+
+  <div class="flag">
+    <strong>Two gaps to close with John before this map is final.</strong>
+    First, the meeting notes record no timings, so every hand-off is marked
+    <em>? delay</em> rather than carrying an invented number &mdash; these need to be filled in from him.
+    Second, the notes never explicitly labelled steps as cost or signal; the red and gold marks
+    here are our reading of what he described, and should be confirmed rather than assumed.
+  </div>
+
+  <details>
+    <summary>Provenance &mdash; every step traced to a line in the meeting notes</summary>
+    <table>
+      <thead><tr><th style="width:4%">#</th><th style="width:26%">Step</th><th style="width:16%">Mark</th><th>Line(s) from the notes</th></tr></thead>
+      <tbody id="prov"></tbody>
+    </table>
+  </details>
+
+  <div class="notcurrent">
+    <h2>Not current state &mdash; proposed build, from the same notes</h2>
+    <p class="lead">Kept outside the flowchart on purpose. These are the features discussed, not steps CIMIT runs today.</p>
+    <ul>
+      <li>Build a reviewer database, categorising reviewers by number rather than identifying information.</li>
+      <li>Rank reviewers on subjective measures and comments from prior reviewers.</li>
+      <li>Calibrate responses to correct for strict-versus-kind scoring variance.</li>
+      <li>Assemble an ideal panel &mdash; a mix of experience and score, SME with an average of 5.</li>
+      <li>Link a person to a score to a public document.</li>
+      <li><em>Next iteration:</em> pull all reviewer scores out of a solicitation; use AI to gather bios; CIMIT supplies reviewer rankings and AI identifies the common characteristics of a good reviewer.</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   EDIT HERE. Layout is computed from this data, so changing a label,
+   a delay, or a mark needs no other edits.
+   mark: "cost" (red) | "signal" (gold) | "none"
+   delay: null renders the dashed "? delay" chip. Replace with a
+   string, e.g. "2 weeks", once John confirms the real timings.
+------------------------------------------------------------------- */
+var LANES = [
+  { label:"INNOVATION TEAM" },
+  { label:"CIMIT STAFF" },
+  { label:"REVIEWERS" },
+  { label:"PANEL OUTCOME" }
+];
+
+var STEPS = [
+  { lane:0, title:"Team submits proposal", role:"Innovation team",
+    tool:"CIMIT proposal platform", note:"", mark:"none",
+    quote:"“Cimit has developed a platform where teams submit proposals”" },
+
+  { lane:1, title:"Identify candidate experts", role:"CIMIT staff",
+    tool:"LinkedIn", note:"No reviewer database behind it", mark:"cost",
+    quote:"“Finding experts who can be reviewers on these projects” · “Currently Expertise- pulled off of LinkedIn”" },
+
+  { lane:1, title:"Screen for independence", role:"CIMIT staff",
+    tool:"Manual judgment", note:"Not associated with the orgs", mark:"signal",
+    quote:"“Find someone that knows a lot about a topic and is not associated with these organizations”" },
+
+  { lane:1, title:"Reach out to candidates", role:"CIMIT staff",
+    tool:"Not tracked", note:"No record of who was asked", mark:"cost",
+    quote:"“We currently don’t track who we reach out to”" },
+
+  { lane:1, title:"Assign reviewers", role:"CIMIT staff",
+    tool:"CIMIT platform", note:"~half one-off or business", mark:"none",
+    quote:"“Then assign viewers and get scores” · “Half of reviewers are one off reviewers or business reviewers”" },
+
+  { lane:2, title:"Reviewers score proposal", role:"Reviewers",
+    tool:"Platform · confidential", note:"Strict vs kind — uncalibrated", mark:"cost",
+    quote:"“Based on confidential information” · “Some reviewers are strict reviewers some are kind”" },
+
+  { lane:3, title:"Panel matched to project", role:"CIMIT",
+    tool:"SME + avg score 5 (1–10)", note:"CIMIT: “one of the real values”", mark:"signal",
+    quote:"“One of the real values is being able to match a panel of reviewers to a project” · “Our criteria for an ideal panel is SME and average score of 5 (1-10 scale)”" }
+];
+
+/* delay for the hand-off from STEPS[i] to STEPS[i+1]; null = not captured */
+var DELAYS = [ null, null, null, null, null, null ];
+
+/* ---------------- layout constants ---------------- */
+var BOX_W = 172, BOX_H = 130;
+var COL_X = [160, 408, 656, 904, 1152, 1400, 1648];
+var LANE_Y = [44, 218, 392, 566], LANE_H = 166, LANE_PAD = 18;
+var LANE_X = 12, LANE_W = 1846;
+
+var COLORS = {
+  cost:   { stroke:"#b3382c", fill:"#fbe9e6", badge:"C" },
+  signal: { stroke:"#b8891a", fill:"#fbf2dc", badge:"S" },
+  none:   { stroke:"#3a3a38", fill:"#ffffff", badge:null }
+};
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function wrap(text, max){
+  var words = String(text).split(/\s+/), lines = [], cur = "";
+  for (var i=0;i<words.length;i++){
+    var test = cur ? cur + " " + words[i] : words[i];
+    if (test.length > max && cur){ lines.push(cur); cur = words[i]; }
+    else cur = test;
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+function boxTop(lane){ return LANE_Y[lane] + LANE_PAD; }
+function boxMid(lane){ return boxTop(lane) + BOX_H/2; }
+
+var svg = [];
+
+/* defs */
+svg.push(
+  '<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" ' +
+  'markerWidth="7" markerHeight="7" orient="auto-start-reverse">' +
+  '<path d="M0,0 L10,5 L0,10 z" fill="#5a5a55"/></marker></defs>'
+);
+
+/* lane bands + labels */
+for (var l=0; l<LANES.length; l++){
+  svg.push('<rect x="'+LANE_X+'" y="'+LANE_Y[l]+'" width="'+LANE_W+'" height="'+LANE_H+'" rx="8" fill="'+(l%2===0?"#e7e2d4":"#ece8dc")+'"/>');
+  svg.push('<text x="'+(LANE_X+16)+'" y="'+(LANE_Y[l]+26)+'" font-size="11.5" font-weight="700" letter-spacing="1.3" fill="#6b675e">'+esc(LANES[l].label)+'</text>');
+}
+
+/* arrows + delay chips (drawn before boxes so boxes sit on top) */
+for (var i=0; i<STEPS.length-1; i++){
+  var x1 = COL_X[i] + BOX_W, y1 = boxMid(STEPS[i].lane);
+  var x2 = COL_X[i+1],       y2 = boxMid(STEPS[i+1].lane);
+  var d  = (y1 === y2)
+    ? 'M'+x1+','+y1+' H'+x2
+    : 'M'+x1+','+y1+' C'+(x1+38)+','+y1+' '+(x2-38)+','+y2+' '+x2+','+y2;
+  svg.push('<path d="'+d+'" fill="none" stroke="#5a5a55" stroke-width="1.8" marker-end="url(#arrow)"/>');
+
+  var cx = (x1 + x2)/2, cy = (y1 + y2)/2;
+  var label = DELAYS[i] === null ? "? delay" : DELAYS[i];
+  var known = DELAYS[i] !== null;
+  var cw = Math.max(56, label.length * 6.2 + 18);
+  svg.push('<rect x="'+(cx-cw/2)+'" y="'+(cy-11)+'" width="'+cw+'" height="22" rx="11" fill="#fff" ' +
+           'stroke="'+(known?"#5a5a55":"#9a948a")+'" stroke-width="1.3"'+(known?"":' stroke-dasharray="3,2.5"')+'/>');
+  svg.push('<text x="'+cx+'" y="'+(cy+4)+'" text-anchor="middle" font-size="10.5" ' +
+           'fill="'+(known?"#23221f":"#8a8479")+'"'+(known?' font-weight="600"':'')+'>'+esc(label)+'</text>');
+}
+
+/* boxes */
+for (var s=0; s<STEPS.length; s++){
+  var st = STEPS[s], c = COLORS[st.mark] || COLORS.none;
+  var bx = COL_X[s], by = boxTop(st.lane);
+
+  svg.push('<rect x="'+bx+'" y="'+by+'" width="'+BOX_W+'" height="'+BOX_H+'" rx="8" fill="'+c.fill+'" stroke="'+c.stroke+'" stroke-width="2"/>');
+
+  /* step number */
+  svg.push('<text x="'+(bx+11)+'" y="'+(by+17)+'" font-size="9" font-weight="700" fill="'+c.stroke+'" opacity=".75">'+(s+1)+'</text>');
+
+  /* friction badge */
+  if (c.badge){
+    svg.push('<circle cx="'+(bx+BOX_W-15)+'" cy="'+(by+15)+'" r="8.5" fill="'+c.stroke+'"/>');
+    svg.push('<text x="'+(bx+BOX_W-15)+'" y="'+(by+18.5)+'" text-anchor="middle" font-size="9.5" font-weight="700" fill="#fff">'+c.badge+'</text>');
+  }
+
+  var ty = by + 32;
+  var tl = wrap(st.title, 20);
+  for (var a=0; a<tl.length; a++){
+    svg.push('<text x="'+(bx+12)+'" y="'+ty+'" font-size="13.5" font-weight="700" fill="#23221f">'+esc(tl[a])+'</text>');
+    ty += 16;
+  }
+  ty += 6;
+  var meta = wrap(st.role, 25).concat(wrap(st.tool, 25));
+  for (var m=0; m<meta.length; m++){
+    svg.push('<text x="'+(bx+12)+'" y="'+ty+'" font-size="10.5" fill="#6b675e">'+esc(meta[m])+'</text>');
+    ty += 13;
+  }
+  ty += 1;
+  if (st.note){
+    var nl = wrap(st.note, 27);
+    for (var b=0; b<nl.length; b++){
+      svg.push('<text x="'+(bx+12)+'" y="'+ty+'" font-size="10" font-style="italic" fill="'+c.stroke+'">'+esc(nl[b])+'</text>');
+      ty += 12;
+    }
+  }
+}
+
+document.getElementById("map").innerHTML = svg.join("");
+
+/* provenance table */
+var MARKTEXT = { cost:"Cost (red)", signal:"Signal worth keeping (gold)", none:"—" };
+var rows = STEPS.map(function(st, i){
+  return '<tr><td>'+(i+1)+'</td><td><strong>'+esc(st.title)+'</strong></td><td>'+MARKTEXT[st.mark]+'</td><td class="q">'+esc(st.quote)+'</td></tr>';
+}).join("");
+document.getElementById("prov").innerHTML = rows;
+</script>
+</body>
+</html>
