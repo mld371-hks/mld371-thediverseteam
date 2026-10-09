@@ -9,7 +9,7 @@
 - Arianne Benge
 - Yael Crupnicoff
 - Yitian Liu
-- Haben Abrha
+
 
 ## Partner Organization
 
