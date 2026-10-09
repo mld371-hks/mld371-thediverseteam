@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CIMIT Relationship Map</title>
+<style>
+  :root {
+    --bg: #fbfaf7; --surface: #ffffff; --text: #1f2328; --muted: #5d646d; --border: #d9d6cf;
+    --halo: #ffffff; --strained: #c8322b;
+    --c-cimit: #2f8f6f; --c-staff: #3f7fbf; --c-org: #8a6bb8; --c-tool: #c47f22; --c-team: #d0567a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #16181c; --surface: #1e2126; --text: #e8e6e1; --muted: #a2a7ae; --border: #363a41;
+      --halo: #1e2126; --strained: #ef6a62;
+      --c-cimit: #45b08c; --c-staff: #5b9ad6; --c-org: #a78bd2; --c-tool: #dc9a3e; --c-team: #e27a99;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16181c; --surface: #1e2126; --text: #e8e6e1; --muted: #a2a7ae; --border: #363a41;
+    --halo: #1e2126; --strained: #ef6a62;
+    --c-cimit: #45b08c; --c-staff: #5b9ad6; --c-org: #a78bd2; --c-tool: #dc9a3e; --c-team: #e27a99;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1120px; margin: 0 auto; padding: 32px 16px 48px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .chart { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px; }
+  svg { display: block; width: 100%; height: auto; }
+  .edge { fill: none; stroke-width: 1.6; stroke-linecap: round; opacity: .75; }
+  .elabel { font-size: 10.5px; fill: var(--muted); paint-order: stroke; stroke: var(--halo); stroke-width: 3px; }
+  .nlabel { font-size: 12.5px; font-weight: 600; fill: var(--text); paint-order: stroke; stroke: var(--halo); stroke-width: 4px; }
+  .nrole { font-size: 10.5px; fill: var(--muted); paint-order: stroke; stroke: var(--halo); stroke-width: 4px; }
+  .node { stroke: var(--surface); stroke-width: 2px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px 26px; margin: 16px 0 0; padding: 0; list-style: none; font-size: 13px; color: var(--muted); }
+  .legend li { display: flex; align-items: center; gap: 8px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+  .line { width: 34px; height: 0; border-top: 2px solid var(--muted); display: inline-block; }
+  .caption { margin: 18px 0 0; max-width: 75ch; }
+  details { margin-top: 20px; font-size: 13.5px; color: var(--muted); }
+  summary { cursor: pointer; color: var(--text); font-weight: 600; }
+  details ul { padding-left: 20px; }
+  a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <h1>CIMIT relationship map</h1>
+  <p class="sub">Public sources only · cimit.org About, Partner With Us and Our Tools pages, plus the team's course partnership</p>
+
+  <div class="chart">
+    <svg id="map" viewBox="0 0 1100 860" role="img" aria-label="Network chart: CIMIT at the center, connected to 15 staff members, two affiliated institutions, four CIMIT tools and the MLD 371 team"></svg>
+  </div>
+
+  <ul class="legend">
+    <li><span class="dot" style="background:var(--c-cimit)"></span>CIMIT</li>
+    <li><span class="dot" style="background:var(--c-staff)"></span>CIMIT staff</li>
+    <li><span class="dot" style="background:var(--c-org)"></span>Affiliated institution</li>
+    <li><span class="dot" style="background:var(--c-tool)"></span>CIMIT tool / program</li>
+    <li><span class="dot" style="background:var(--c-team)"></span>MLD 371 team</li>
+    <li>Node size = number of relationships held</li>
+    <li>Edge label = relationship channel</li>
+    <li><span class="line"></span>Frequency not documented (all edges equal width)</li>
+    <li><span class="line" style="border-color:var(--strained)"></span>Strained (none documented)</li>
+  </ul>
+
+  <p class="caption">Every relationship here comes from CIMIT's public website or the team's own repo. CIMIT is the hub. Public pages list who works there, which institutions it's affiliated with and which tools it runs, but not how people work with each other. So there are no person-to-person lines, and no line is thicker or red: neither frequency nor strain is documented.</p>
+
+  <details>
+    <summary>Source for each relationship</summary>
+    <ul id="sources"></ul>
+  </details>
+</main>
+
+<script>
+(function () {
+  var SRC = {
+    about: ["CIMIT · About Us", "https://cimit.org/about/"],
+    partner: ["CIMIT · Partner With Us", "https://cimit.org/partner-with-us/"],
+    tools: ["CIMIT · Our Tools", "https://cimit.org/our-tools/"],
+    repo: ["Team repo README", "https://github.com/QueenBun/mld371-thediverseteam"]
+  };
+  var staff = [
+    ["John Parrish, MD", "Chief Executive Officer"],
+    ["Andrea Depatie", "Chief Finance & Information Officer"],
+    ["Michael K. Dempsey", "Chief Strategy Officer"],
+    ["Steven Schachter, MD", "Chief Academic Officer"],
+    ["Paul Tessier", "Chief Operating Officer"],
+    ["Josie Aquino", "Operations Project Coordinator"],
+    ["Sophie Beckman", "Program Coordinator"],
+    ["John Collins, PhD", "Director, Innovative Platforms"],
+    ["Marshall Collins", "Director of Information Systems"],
+    ["Cecile Davis", "Administrative Assistant"],
+    ["Kerry DeVito, MFA", "Communications Coordinator"],
+    ["Jamal Farouk", "Finance Manager"],
+    ["Michele Liston", "Director of Operations"],
+    ["Tracy McMahon", "Director of Communications"],
+    ["Santosh Savaliya, MA", "Operations Analyst"]
+  ];
+  // [name, role, type, channel, source]
+  var spokes = staff.map(function (s) { return [s[0], s[1], "staff", "Staff", "about"]; });
+  spokes = spokes.concat([
+    ["Mass General Hospital", "Affiliated institution", "org", "Affiliation", "partner"],
+    ["Harvard Medical School", "Affiliated institution", "org", "Affiliation", "partner"],
+    ["GAITS", "Project & portfolio tracking", "tool", "CIMIT tool", "tools"],
+    ["CoLab", "Proposal management", "tool", "CIMIT tool", "tools"],
+    ["Risk Assessment Score", "Project risk evaluation", "tool", "CIMIT tool", "tools"],
+    ["CRAASH", "Accelerator course", "tool", "CIMIT program", "tools"],
+    ["MLD 371 team", "TheDiverseTeam, 6 students", "team", "Course partnership", "repo"]
+  ]);
+
+  var NS = "http://www.w3.org/2000/svg", svg = document.getElementById("map");
+  var CX = 550, CY = 430, R = 300;
+  function el(tag, attrs, text) {
+    var x = document.createElementNS(NS, tag);
+    for (var k in attrs) x.setAttribute(k, attrs[k]);
+    if (text) x.textContent = text;
+    return x;
+  }
+  function radius(deg) { return 7 + Math.sqrt(deg) * 6; }
+  var color = { cimit: "var(--c-cimit)", staff: "var(--c-staff)", org: "var(--c-org)", tool: "var(--c-tool)", team: "var(--c-team)" };
+
+  var gE = el("g", {}), gL = el("g", {}), gN = el("g", {});
+  svg.appendChild(gE); svg.appendChild(gL); svg.appendChild(gN);
+
+  var n = spokes.length;
+  spokes.forEach(function (s, i) {
+    var ang = -Math.PI / 2 + (i + 0.5) * 2 * Math.PI / n;
+    var cos = Math.cos(ang), sin = Math.sin(ang);
+    var x = CX + R * cos, y = CY + R * sin;
+    var e = el("line", { x1: CX, y1: CY, x2: x, y2: y, class: "edge", stroke: color[s[2]] });
+    e.appendChild(el("title", {}, "CIMIT ↔ " + s[0] + ": " + s[3]));
+    gE.appendChild(e);
+
+    // channel label along the spoke, kept upright
+    var deg = ang * 180 / Math.PI, flip = cos < 0;
+    var lx = CX + 175 * cos, ly = CY + 175 * sin;
+    gL.appendChild(el("text", {
+      x: lx, y: ly - 4, class: "elabel", "text-anchor": "middle",
+      transform: "rotate(" + (flip ? deg + 180 : deg) + " " + lx + " " + ly + ")"
+    }, s[3]));
+
+    var r = radius(1);
+    gN.appendChild(el("circle", { cx: x, cy: y, r: r, class: "node", fill: color[s[2]] }));
+    var anchor = cos > 0 ? "start" : "end";
+    var tx = x + (r + 8) * cos, ty = y + (r + 8) * sin;
+    if (Math.abs(cos) < 0.3) ty += sin > 0 ? 6 : -8;
+    gN.appendChild(el("text", { x: tx, y: ty, class: "nlabel", "text-anchor": anchor }, s[0]));
+    gN.appendChild(el("text", { x: tx, y: ty + 14, class: "nrole", "text-anchor": anchor }, s[1] + " · 1"));
+  });
+
+  var rc = radius(n);
+  gN.appendChild(el("circle", { cx: CX, cy: CY, r: rc, class: "node", fill: color.cimit }));
+  gN.appendChild(el("text", { x: CX, y: CY + 5, class: "nlabel", "text-anchor": "middle", style: "fill:#fff;stroke:none;font-size:15px" }, "CIMIT"));
+  gN.appendChild(el("text", { x: CX, y: CY + rc + 16, class: "nrole", "text-anchor": "middle" }, n + " relationships"));
+
+  var list = document.getElementById("sources");
+  spokes.forEach(function (s) {
+    var li = document.createElement("li"), a = document.createElement("a");
+    a.href = SRC[s[4]][1]; a.textContent = SRC[s[4]][0]; a.target = "_blank"; a.rel = "noopener";
+    li.appendChild(document.createTextNode("CIMIT ↔ " + s[0] + " (" + s[3] + (s[2] === "staff" ? ", " + s[1] : "") + "): "));
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+})();
+</script>
+</body>
+</html>
