@@ -49,17 +49,16 @@
 <body>
 <main>
   <h1>CIMIT relationship map</h1>
-  <p class="sub">Public sources only · cimit.org About, Partner With Us and Our Tools pages, plus the team's course partnership</p>
+  <p class="sub">Public sources only · cimit.org About and Our Tools pages, plus the team's course partnership</p>
 
   <div class="chart">
-    <svg id="map" viewBox="0 0 1100 860" role="img" aria-label="Network chart: CIMIT at the center, connected to 15 staff members, two affiliated institutions, four CIMIT tools and the MLD 371 team"></svg>
+    <svg id="map" viewBox="0 0 1100 640" role="img" aria-label="Network chart: CIMIT at the center, connected to staff members John Collins and Marshall Collins, the CoLab tool and the MLD 371 team"></svg>
   </div>
 
   <ul class="legend">
     <li><span class="dot" style="background:var(--c-cimit)"></span>CIMIT</li>
     <li><span class="dot" style="background:var(--c-staff)"></span>CIMIT staff</li>
-    <li><span class="dot" style="background:var(--c-org)"></span>Affiliated institution</li>
-    <li><span class="dot" style="background:var(--c-tool)"></span>CIMIT tool / program</li>
+    <li><span class="dot" style="background:var(--c-tool)"></span>CIMIT tool</li>
     <li><span class="dot" style="background:var(--c-team)"></span>MLD 371 team</li>
     <li>Node size = number of relationships held</li>
     <li>Edge label = relationship channel</li>
@@ -67,7 +66,7 @@
     <li><span class="line" style="border-color:var(--strained)"></span>Strained (none documented)</li>
   </ul>
 
-  <p class="caption">Every relationship here comes from CIMIT's public website or the team's own repo. CIMIT is the hub. Public pages list who works there, which institutions it's affiliated with and which tools it runs, but not how people work with each other. So there are no person-to-person lines, and no line is thicker or red: neither frequency nor strain is documented.</p>
+  <p class="caption">Every relationship here comes from CIMIT's public website or the team's own repo. CIMIT is the hub. The map shows two CIMIT staff members, one CIMIT tool and our team. Public pages list who works at CIMIT and which tools it runs, but not how people work with each other. So there are no person-to-person lines, and no line is thicker or red: neither frequency nor strain is documented.</p>
 
   <details>
     <summary>Source for each relationship</summary>
@@ -79,41 +78,22 @@
 (function () {
   var SRC = {
     about: ["CIMIT · About Us", "https://cimit.org/about/"],
-    partner: ["CIMIT · Partner With Us", "https://cimit.org/partner-with-us/"],
     tools: ["CIMIT · Our Tools", "https://cimit.org/our-tools/"],
     repo: ["Team repo README", "https://github.com/QueenBun/mld371-thediverseteam"]
   };
   var staff = [
-    ["John Parrish, MD", "Chief Executive Officer"],
-    ["Andrea Depatie", "Chief Finance & Information Officer"],
-    ["Michael K. Dempsey", "Chief Strategy Officer"],
-    ["Steven Schachter, MD", "Chief Academic Officer"],
-    ["Paul Tessier", "Chief Operating Officer"],
-    ["Josie Aquino", "Operations Project Coordinator"],
-    ["Sophie Beckman", "Program Coordinator"],
     ["John Collins, PhD", "Director, Innovative Platforms"],
-    ["Marshall Collins", "Director of Information Systems"],
-    ["Cecile Davis", "Administrative Assistant"],
-    ["Kerry DeVito, MFA", "Communications Coordinator"],
-    ["Jamal Farouk", "Finance Manager"],
-    ["Michele Liston", "Director of Operations"],
-    ["Tracy McMahon", "Director of Communications"],
-    ["Santosh Savaliya, MA", "Operations Analyst"]
+    ["Marshall Collins", "Director of Information Systems"]
   ];
   // [name, role, type, channel, source]
   var spokes = staff.map(function (s) { return [s[0], s[1], "staff", "Staff", "about"]; });
   spokes = spokes.concat([
-    ["Mass General Hospital", "Affiliated institution", "org", "Affiliation", "partner"],
-    ["Harvard Medical School", "Affiliated institution", "org", "Affiliation", "partner"],
-    ["GAITS", "Project & portfolio tracking", "tool", "CIMIT tool", "tools"],
     ["CoLab", "Proposal management", "tool", "CIMIT tool", "tools"],
-    ["Risk Assessment Score", "Project risk evaluation", "tool", "CIMIT tool", "tools"],
-    ["CRAASH", "Accelerator course", "tool", "CIMIT program", "tools"],
     ["MLD 371 team", "TheDiverseTeam, 6 students", "team", "Course partnership", "repo"]
   ]);
 
   var NS = "http://www.w3.org/2000/svg", svg = document.getElementById("map");
-  var CX = 550, CY = 430, R = 300;
+  var CX = 550, CY = 320, R = 250;
   function el(tag, attrs, text) {
     var x = document.createElementNS(NS, tag);
     for (var k in attrs) x.setAttribute(k, attrs[k]);
@@ -121,7 +101,7 @@
     return x;
   }
   function radius(deg) { return 7 + Math.sqrt(deg) * 6; }
-  var color = { cimit: "var(--c-cimit)", staff: "var(--c-staff)", org: "var(--c-org)", tool: "var(--c-tool)", team: "var(--c-team)" };
+  var color = { cimit: "var(--c-cimit)", staff: "var(--c-staff)", tool: "var(--c-tool)", team: "var(--c-team)" };
 
   var gE = el("g", {}), gL = el("g", {}), gN = el("g", {});
   svg.appendChild(gE); svg.appendChild(gL); svg.appendChild(gN);
@@ -152,7 +132,7 @@
     gN.appendChild(el("text", { x: tx, y: ty + 14, class: "nrole", "text-anchor": anchor }, s[1] + " · 1"));
   });
 
-  var rc = radius(n);
+  var rc = Math.max(radius(n), 30);
   gN.appendChild(el("circle", { cx: CX, cy: CY, r: rc, class: "node", fill: color.cimit }));
   gN.appendChild(el("text", { x: CX, y: CY + 5, class: "nlabel", "text-anchor": "middle", style: "fill:#fff;stroke:none;font-size:15px" }, "CIMIT"));
   gN.appendChild(el("text", { x: CX, y: CY + rc + 16, class: "nrole", "text-anchor": "middle" }, n + " relationships"));
